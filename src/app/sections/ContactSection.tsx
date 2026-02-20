@@ -17,7 +17,17 @@ export default function ContactSection() {
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] h-[100px] -rotate-[12deg] bg-indigo-600/20 rounded-full blur-[72px] pointer-events-none" />
         <div className="absolute left-[35%] top-[40%] w-[160px] h-[80px] rotate-12 bg-violet-500/15 rounded-full blur-[72px] pointer-events-none" />
         <div className="absolute left-[30%] top-[55%] w-[140px] h-[90px] -rotate-[23deg] bg-blue-600/15 rounded-full blur-[72px] pointer-events-none" />
-        <div className="absolute flex items-center justify-center top-8 right-20 pointer-events-none z-10">
+        <div className="absolute left-1/3 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[180px] h-[80px] -rotate-[23deg] bg-violet-600/25 rounded-full blur-[72px] pointer-events-none" />
+        <div className="absolute left-1/3 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] h-[100px] -rotate-[12deg] bg-indigo-600/20 rounded-full blur-[72px] pointer-events-none" />
+        <div className="absolute left-[20%] top-[40%] w-[160px] h-[80px] rotate-12 bg-violet-500/15 rounded-full blur-[72px] pointer-events-none" />
+        <div className="absolute left-[25%] top-[55%] w-[140px] h-[90px] -rotate-[23deg] bg-blue-600/15 rounded-full blur-[72px] pointer-events-none" />
+        <div className="absolute right-1/3 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[180px] h-[80px] -rotate-[23deg] bg-violet-600/25 rounded-full blur-[72px] pointer-events-none" />
+        <div className="absolute right-1/3 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] h-[100px] -rotate-[12deg] bg-indigo-600/40 rounded-full blur-[72px] pointer-events-none" />
+        <div className="absolute right-[30%] top-[40%] w-[160px] h-[80px] rotate-12 bg-violet-500/15 rounded-full blur-[72px] pointer-events-none" />
+        <div className="absolute right-[25%] top-[55%] w-[140px] h-[90px] -rotate-[23deg] bg-blue-600/30 rounded-full blur-[72px] pointer-events-none" />
+
+
+        <div className="absolute flex items-center justify-center -top-4 right-20 pointer-events-none z-10">
           <Image src="/images/contact-us.svg" alt="contact us" width={180} height={150} />
           <span className="absolute text-[#B5B2C9] text-xl rotate-[0.37rad] left-14">تماس با ما</span>
         </div>
@@ -27,8 +37,8 @@ export default function ContactSection() {
         </h2>
         <p className="relative z-10 max-w-[776px] mx-auto text-center text-neutral-400 text-xl font-medium font-iranyekan leading-9 mb-12">{CONTACT_COPY.desc}</p>
         <div className="relative z-10 flex flex-wrap justify-center gap-8">
-          <span className="text-white text-xl font-medium font-iranyekan leading-5 px-10 py-4 bg-blue-600 rounded-3xl flex items-center justify-center gap-2.5 hover:bg-blue-700 transition-colors">ارتباط در گفتینو</span>
-          <a href="tel:09118567831" className="px-10 py-4 rounded-3xl border border-blue-600 flex items-center justify-center gap-2.5 hover:bg-gray-800 transition-colors">
+          <span className="text-white text-xl font-medium font-iranyekan leading-5 px-10 py-4 bg-blue-600 rounded-3xl flex items-center justify-center gap-2.5 hover:bg-blue-700 transition-colors cursor-pointer">ارتباط در گفتینو</span>
+          <a href="tel:09118567831" className="px-10 py-4 rounded-3xl border border-blue-600 flex items-center justify-center gap-2.5 hover:bg-gray-800/50 transition-colors">
             <span className="text-gray-200 text-xl font-medium font-iranyekan leading-5">09118567831</span>
           </a>
         </div>
