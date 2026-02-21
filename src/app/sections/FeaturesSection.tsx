@@ -1,9 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { DiagramIcon, GraphIcon, InformationIcon, BuySellIcon } from "@/components/icons";
 import { SECTION_IDS } from "@/lib/constants";
+import { useCheckoutPlans } from "@/hooks/useCheckoutPlans";
+import { useCheckoutInitiate } from "@/hooks/useCheckoutInitiate";
+import { formatPlanPrice } from "@/lib/services/checkout.service";
 
 const FEATURE_ICONS = { chart: DiagramIcon, analysis: GraphIcon, risk: InformationIcon, suggest: BuySellIcon } as const;
 
@@ -30,8 +33,29 @@ function FeatureCard({ title, desc, icon, className }: { title: string; desc: st
 }
 
 export default function FeaturesSection() {
-  const [selectedPlan, setSelectedPlan] = useState<"6month" | "1year">("6month");
-  const plans = { "6month": { price: "۳۵,۰۰۰,۰۰۰ تومان" }, "1year": { price: "۶۰,۰۰۰,۰۰۰ تومان" } };
+  const { plans, isLoading } = useCheckoutPlans();
+  const { startCheckout, isRedirecting, error } = useCheckoutInitiate();
+  const [selectedPlan, setSelectedPlan] = useState<string>("");
+
+  const handleBuyPlan = (planId: number) => {
+    if (isRedirecting) return;
+    startCheckout(planId);
+  };
+
+  useEffect(() => {
+    if (plans.length > 0 && !plans.some((p) => p.slug === selectedPlan)) {
+      setSelectedPlan(plans[0].slug);
+    } else if (plans.length > 0 && selectedPlan === "") {
+      setSelectedPlan(plans[0].slug);
+    }
+  }, [plans, selectedPlan]);
+
+  const selected = useMemo(
+    () => plans.find((p) => p.slug === selectedPlan) ?? plans[0],
+    [plans, selectedPlan]
+  );
+  const displayPrice = selected ? formatPlanPrice(selected.price, selected.currency) : "—";
+  const planSlugs = useMemo(() => plans.map((p) => p.slug), [plans]);
 
   return (
     <section id={SECTION_IDS.features} className="relative w-full py-24 px-4 lg:px-12 overflow-hidden min-h-[880px]" style={{ maxWidth: "var(--landing-max-width)", marginLeft: "auto", marginRight: "auto" }}>
@@ -72,13 +96,29 @@ export default function FeaturesSection() {
             <div className="absolute right-4 top-[55%] lg:top-[64%] w-[350px] lg:w-[400px] z-20">
               <div className="bg-gray-950/60 backdrop-blur-2xl rounded-[28px] p-5 border border-white/10 shadow-2xl" style={{ background: "rgba(24, 27, 41, 0.60)" }}>
                 <div className="flex justify-between bg-gray-900/60 backdrop-blur rounded-2xl p-1.5 mb-6 border border-white/5">
-                  <button type="button" onClick={() => setSelectedPlan("1year")} className={`flex-1 py-2.5 text-xs font-bold rounded-xl ${selectedPlan === "1year" ? "bg-[#FCAE16] text-black" : "text-white"}`}>پلن ۱ ساله</button>
-                  <button type="button" onClick={() => setSelectedPlan("6month")} className={`flex-1 py-2.5 text-xs font-bold rounded-xl ${selectedPlan === "6month" ? "bg-[#FCAE16] text-black" : "text-white"}`}>پلن ۶ ماهه</button>
+                  {planSlugs.length > 0
+                    ? plans.map((p) => (
+                        <button key={p.id} type="button" onClick={() => setSelectedPlan(p.slug)} className={`flex-1 py-2.5 text-xs font-bold rounded-xl ${selectedPlan === p.slug ? "bg-[#FCAE16] text-black" : "text-white"}`}>{p.name}</button>
+                      ))
+                    : (
+                      <>
+                        <button type="button" className="flex-1 py-2.5 text-xs font-bold rounded-xl text-white/50">پلن ۱ ساله</button>
+                        <button type="button" className="flex-1 py-2.5 text-xs font-bold rounded-xl text-white/50">پلن ۶ ماهه</button>
+                      </>
+                    )}
                 </div>
                 <div className="flex justify-between gap-3">
-                  <span className="text-gray-200 text-base lg:text-lg font-bold font-iranyekan">{plans[selectedPlan].price}</span>
-                  <button type="button" className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-xl">خرید پلن</button>
+                  <span className="text-gray-200 text-base lg:text-lg font-bold font-iranyekan">{isLoading ? "—" : displayPrice}</span>
+                  <button
+                    type="button"
+                    onClick={() => selected?.id != null && handleBuyPlan(selected.id)}
+                    disabled={!selected?.id || isRedirecting}
+                    className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-xl"
+                  >
+                    {isRedirecting ? "در حال انتقال…" : "خرید پلن"}
+                  </button>
                 </div>
+                {error && <p className="text-red-400 text-sm mt-2 text-center">{error}</p>}
               </div>
             </div>
           </div>
@@ -129,27 +169,36 @@ export default function FeaturesSection() {
 
         <div className="mt-8 rounded-[21px] border border-slate-700 bg-slate-900/80 p-4">
           <div className="flex items-center justify-between bg-slate-900 rounded-xl border border-slate-700 p-1.5 mb-4">
-            <button
-              type="button"
-              onClick={() => setSelectedPlan("1year")}
-              className={`w-1/2 py-2 text-xs font-medium rounded-lg transition-colors ${selectedPlan === "1year" ? "bg-yellow-600 text-white" : "text-white/70"}`}
-            >
-              پلن ۱ ساله
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedPlan("6month")}
-              className={`w-1/2 py-2 px-6 text-xs font-medium rounded-lg transition-colors ${selectedPlan === "6month" ? "bg-yellow-600 text-white" : "text-white/70"}`}
-            >
-              پلن ۶ ماهه
-            </button>
+            {planSlugs.length > 0
+              ? plans.map((p) => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => setSelectedPlan(p.slug)}
+                    className={`w-1/2 py-2 text-xs font-medium rounded-lg transition-colors ${selectedPlan === p.slug ? "bg-yellow-600 text-white" : "text-white/70"}`}
+                  >
+                    {p.name}
+                  </button>
+                ))
+              : (
+                <>
+                  <button type="button" className="w-1/2 py-2 text-xs font-medium rounded-lg text-white/50">پلن ۱ ساله</button>
+                  <button type="button" className="w-1/2 py-2 px-6 text-xs font-medium rounded-lg text-white/50">پلن ۶ ماهه</button>
+                </>
+              )}
           </div>
           <div className="flex items-center justify-between gap-3">
-            <span className="text-gray-200 text-base font-normal font-iranyekan">{plans[selectedPlan].price}</span>
-            <button type="button" className="px-5 py-1.5 bg-blue-600 rounded-[10px] text-gray-200 text-xs font-iranyekan">
-              خرید پلن
+            <span className="text-gray-200 text-base font-normal font-iranyekan">{isLoading ? "—" : displayPrice}</span>
+            <button
+              type="button"
+              onClick={() => selected?.id != null && handleBuyPlan(selected.id)}
+              disabled={!selected?.id || isRedirecting}
+              className="px-5 py-1.5 bg-blue-600 rounded-[10px] text-gray-200 text-xs font-iranyekan disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isRedirecting ? "…" : "خرید پلن"}
             </button>
           </div>
+          {error && <p className="text-red-400 text-xs mt-2 text-center">{error}</p>}
         </div>
       </div>
     </section>

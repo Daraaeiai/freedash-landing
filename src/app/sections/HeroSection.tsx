@@ -1,16 +1,38 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import GlowIcon from "@/components/icons/GlowIcon";
 import { LANDING_MAX_W } from "@/lib/constants";
+import { useCheckoutPlans } from "@/hooks/useCheckoutPlans";
+import { useCheckoutInitiate } from "@/hooks/useCheckoutInitiate";
+import { formatPlanPrice } from "@/lib/services/checkout.service";
 
 export default function HeroSection() {
-  const [selectedPlan, setSelectedPlan] = useState<"6month" | "1year">("6month");
-  const plans = {
-    "6month": { title: "پلن ۶ ماهه", price: "۳۵,۰۰۰,۰۰۰ تومان", label: "پلن ۶ ماهه" },
-    "1year": { title: "پلن ۱ ساله", price: "۶۰,۰۰۰,۰۰۰ تومان", label: "پلن ۱ ساله" },
+  const { plans, isLoading } = useCheckoutPlans();
+  const { startCheckout, isRedirecting, error } = useCheckoutInitiate();
+  const [selectedPlan, setSelectedPlan] = useState<string>("");
+
+  const handleBuyPlan = (planId: number) => {
+    if (isRedirecting) return;
+    startCheckout(planId);
   };
+  useEffect(() => {
+    if (plans.length > 0 && !plans.some((p) => p.slug === selectedPlan)) {
+      setSelectedPlan(plans[0].slug);
+    } else if (plans.length > 0 && selectedPlan === "") {
+      setSelectedPlan(plans[0].slug);
+    }
+  }, [plans, selectedPlan]);
+
+  const selected = useMemo(
+    () => plans.find((p) => p.slug === selectedPlan) ?? plans[0],
+    [plans, selectedPlan]
+  );
+  const displayPrice = selected
+    ? formatPlanPrice(selected.price, selected.currency)
+    : "—";
+  const planSlugs = useMemo(() => plans.map((p) => p.slug), [plans]);
 
   return (
     <section className={`relative w-full ${LANDING_MAX_W} mx-auto overflow-hidden`}>
@@ -85,29 +107,39 @@ export default function HeroSection() {
                 style={{ background: "rgba(24, 27, 41, 0.60)" }}
               >
                 <div className="flex items-center justify-between bg-gray-900/60 backdrop-blur rounded-2xl p-1.5 mb-8 border border-white/5">
-                  <button
-                    onClick={() => setSelectedPlan("1year")}
-                    className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${selectedPlan === "1year" ? "bg-[#FCAE16] text-black shadow-lg" : "text-white hover:text-white/30"}`}
-                  >
-                    پلن ۱ ساله
-                  </button>
-                  <button
-                    onClick={() => setSelectedPlan("6month")}
-                    className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${selectedPlan === "6month" ? "bg-[#FCAE16] text-black shadow-lg" : "text-white hover:text-white/30"}`}
-                  >
-                    پلن ۶ ماهه
-                  </button>
+                  {planSlugs.length > 0
+                    ? plans.map((p) => (
+                      <button
+                        key={p.id}
+                        onClick={() => setSelectedPlan(p.slug)}
+                        className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${selectedPlan === p.slug ? "bg-[#FCAE16] text-black shadow-lg" : "text-white hover:text-white/30"}`}
+                      >
+                        {p.name}
+                      </button>
+                    ))
+                    : (
+                      <>
+                        <button className="flex-1 py-3 text-sm font-bold rounded-xl transition-all text-white/50">پلن ۱ ساله</button>
+                        <button className="flex-1 py-3 text-sm font-bold rounded-xl transition-all text-white/50">پلن ۶ ماهه</button>
+                      </>
+                    )}
                 </div>
                 <div className="flex items-center justify-between gap-4">
                   <div className="text-right">
                     <span className="block text-gray-200 text-lg lg:text-xl font-bold font-iranyekan mb-1">
-                      {plans[selectedPlan].price}
+                      {isLoading ? "—" : displayPrice}
                     </span>
                   </div>
-                  <button className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white text-base font-medium rounded-xl transition-all shadow-[0_4px_20px_-5px_rgba(37,99,235,0.5)]">
-                    خرید پلن
+                  <button
+                    type="button"
+                    onClick={() => selected?.id != null && handleBuyPlan(selected.id)}
+                    disabled={!selected?.id || isRedirecting}
+                    className="px-8 py-3 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-base font-medium rounded-xl transition-all shadow-[0_4px_20px_-5px_rgba(37,99,235,0.5)]"
+                  >
+                    {isRedirecting ? "در حال انتقال…" : "خرید پلن"}
                   </button>
                 </div>
+                {error && <p className="text-red-400 text-sm mt-2 text-center">{error}</p>}
               </div>
             </div>
           </div>
@@ -122,18 +154,28 @@ export default function HeroSection() {
 
             <div className="flex flex-wrap justify-center gap-8 relative z-10 mt-10">
               <div className="w-full max-w-[593px] h-72 bg-[#141A31] rounded-[42px] border-2 border-[#323250] p-8 flex flex-col justify-between items-center">
-                <h4 className="text-white text-4xl font-semibold font-iranyekan leading-tight">پلن ۱ ساله</h4>
-                <p className="text-zinc-500 text-xl font-medium font-iranyekan leading-9">لورم ایپسوم متن ساختگی با تولید</p>
-                <div className="w-80 px-8 py-4 bg-indigo-700 rounded-3xl inline-flex justify-center items-center gap-2.5">
-                  <span className="text-gray-200 text-2xl font-normal font-iranyekan leading-9">70,000,000 تومان</span>
-                </div>
+                <h4 className="text-white text-4xl font-semibold font-iranyekan leading-tight">{plans[0]?.name ?? "پلن ۱ ساله"}</h4>
+                {plans[0]?.description && <p className="text-zinc-500 text-xl font-medium font-iranyekan leading-9">{plans[0]?.description}</p>}
+                <button
+                  type="button"
+                  onClick={() => plans[0] && handleBuyPlan(plans[0].id)}
+                  disabled={!plans[0] || isRedirecting}
+                  className="w-80 px-8 py-4 bg-indigo-700 rounded-3xl inline-flex justify-center items-center gap-2.5 hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  <span className="text-gray-200 text-2xl font-normal font-iranyekan leading-9">{plans[0] ? formatPlanPrice(plans[0].price, plans[0].currency) : "—"}</span>
+                </button>
               </div>
               <div className="w-full max-w-[593px] h-72 bg-[#141A31] rounded-[42px] border-2 border-[#323250] p-8 flex flex-col justify-between items-center">
-                <h4 className="text-white text-4xl font-semibold font-iranyekan leading-tight">پلن ۶ ماهه</h4>
-                <p className="text-zinc-500 text-xl font-medium font-iranyekan leading-9">لورم ایپسوم متن ساختگی با تولید</p>
-                <div className="w-80 px-8 py-4 rounded-3xl outline outline-[2px] outline-blue-600 outline-offset-[-3px] inline-flex justify-center items-center gap-2.5">
-                  <span className="text-gray-200 text-2xl font-normal font-iranyekan leading-9">45,000,000 تومان</span>
-                </div>
+                <h4 className="text-white text-4xl font-semibold font-iranyekan leading-tight">{plans[1]?.name ?? "پلن ۶ ماهه"}</h4>
+                {plans[1]?.description && <p className="text-zinc-500 text-xl font-medium font-iranyekan leading-9">{plans[1]?.description}</p>}
+                <button
+                  type="button"
+                  onClick={() => plans[1] && handleBuyPlan(plans[1].id)}
+                  disabled={!plans[1] || isRedirecting}
+                  className="w-80 px-8 py-4 rounded-3xl outline outline-[2px] outline-blue-600 outline-offset-[-3px] inline-flex justify-center items-center gap-2.5 hover:bg-blue-600/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  <span className="text-gray-200 text-2xl font-normal font-iranyekan leading-9">{plans[1] ? formatPlanPrice(plans[1].price, plans[1].currency) : "—"}</span>
+                </button>
               </div>
             </div>
           </div>
@@ -158,27 +200,36 @@ export default function HeroSection() {
         </p>
         <div className="mt-8 rounded-[21px] border border-slate-700 bg-slate-900/80 p-4">
           <div className="flex items-center justify-between bg-slate-900 rounded-xl border border-slate-700 p-1.5 mb-4">
-            <button
-              type="button"
-              onClick={() => setSelectedPlan("1year")}
-              className={`w-1/2 py-2 text-xs font-medium rounded-lg transition-colors ${selectedPlan === "1year" ? "bg-yellow-600 text-white" : "text-white/70"}`}
-            >
-              پلن ۱ ساله
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedPlan("6month")}
-              className={`w-1/2 py-2 px-6 text-xs font-medium rounded-lg transition-colors ${selectedPlan === "6month" ? "bg-yellow-600 text-white" : "text-white/70"}`}
-            >
-              پلن ۶ ماهه
-            </button>
+            {planSlugs.length > 0
+              ? plans.map((p) => (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => setSelectedPlan(p.slug)}
+                  className={`w-1/2 py-2 text-xs font-medium rounded-lg transition-colors ${selectedPlan === p.slug ? "bg-yellow-600 text-white" : "text-white/70"}`}
+                >
+                  {p.name}
+                </button>
+              ))
+              : (
+                <>
+                  <button type="button" className="w-1/2 py-2 text-xs font-medium rounded-lg text-white/50">پلن ۱ ساله</button>
+                  <button type="button" className="w-1/2 py-2 px-6 text-xs font-medium rounded-lg text-white/50">پلن ۶ ماهه</button>
+                </>
+              )}
           </div>
           <div className="flex items-center justify-between gap-3">
-            <span className="text-gray-200 text-base font-normal font-iranyekan">{plans[selectedPlan].price}</span>
-            <button type="button" className="px-5 py-1.5 bg-blue-600 rounded-[10px] text-gray-200 text-xs font-iranyekan">
-              خرید پلن
+            <span className="text-gray-200 text-base font-normal font-iranyekan">{isLoading ? "—" : displayPrice}</span>
+            <button
+              type="button"
+              onClick={() => selected?.id != null && handleBuyPlan(selected.id)}
+              disabled={!selected?.id || isRedirecting}
+              className="px-5 py-1.5 bg-blue-600 rounded-[10px] text-gray-200 text-xs font-iranyekan disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isRedirecting ? "…" : "خرید پلن"}
             </button>
           </div>
+          {error && <p className="text-red-400 text-xs mt-2 text-center">{error}</p>}
         </div>
         <div className="relative z-5 mt-14 animate-float">
           {/* هاله نور پشت گوشی */}
@@ -211,18 +262,28 @@ export default function HeroSection() {
           </p>
           <div className="space-y-4 mb-12">
             <div className="bg-slate-900 rounded-[32px] border-2 border-slate-700 p-6 flex flex-col items-center gap-3">
-              <h3 className="text-gray-200 text-2xl font-semibold font-iranyekan">پلن 6 ماهه</h3>
-              <p className="text-zinc-500 text-sm font-medium font-iranyekan text-center">لورم ایپسوم متن ساختگی با تولید</p>
-              <div className="w-48 px-8 py-3 mt-2 rounded-[32px] outline outline-2 outline-offset-[-2px] outline-blue-600 inline-flex justify-center">
-                <span className="text-gray-200 text-base font-medium font-iranyekan">35,000,000 تومان</span>
-              </div>
+              <h3 className="text-gray-200 text-2xl font-semibold font-iranyekan">{plans[0]?.name ?? "پلن 6 ماهه"}</h3>
+              {plans[0]?.description && <p className="text-zinc-500 text-sm font-medium font-iranyekan text-center">{plans[0]?.description}</p>}
+              <button
+                type="button"
+                onClick={() => plans[0] && handleBuyPlan(plans[0].id)}
+                disabled={!plans[0] || isRedirecting}
+                className="w-48 px-8 py-3 mt-2 rounded-[32px] outline outline-2 outline-offset-[-2px] outline-blue-600 inline-flex justify-center hover:bg-blue-600/20 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span className="text-gray-200 text-base font-medium font-iranyekan">{plans[0] ? formatPlanPrice(plans[0].price, plans[0].currency) : "—"}</span>
+              </button>
             </div>
             <div className="bg-slate-900 rounded-[32px] border-2 border-slate-700 p-6 flex flex-col items-center gap-3">
-              <h3 className="text-gray-200 text-2xl font-semibold font-iranyekan">پلن 1 ساله</h3>
-              <p className="text-zinc-500 text-sm font-medium font-iranyekan text-center">لورم ایپسوم متن ساختگی با تولید</p>
-              <div className="w-48 px-8 py-3 mt-2 rounded-[32px] outline outline-2 outline-offset-[-2px] outline-blue-600 inline-flex justify-center">
-                <span className="text-gray-200 text-base font-medium font-iranyekan">60,000,000 تومان</span>
-              </div>
+              <h3 className="text-gray-200 text-2xl font-semibold font-iranyekan">{plans[1]?.name ?? "پلن 1 ساله"}</h3>
+              {plans[1]?.description && <p className="text-zinc-500 text-sm font-medium font-iranyekan text-center">{plans[1]?.description}</p>}
+              <button
+                type="button"
+                onClick={() => plans[1] && handleBuyPlan(plans[1].id)}
+                disabled={!plans[1] || isRedirecting}
+                className="w-48 px-8 py-3 mt-2 rounded-[32px] outline outline-2 outline-offset-[-2px] outline-blue-600 inline-flex justify-center hover:bg-blue-600/20 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span className="text-gray-200 text-base font-medium font-iranyekan">{plans[1] ? formatPlanPrice(plans[1].price, plans[1].currency) : "—"}</span>
+              </button>
             </div>
           </div>
         </div>
