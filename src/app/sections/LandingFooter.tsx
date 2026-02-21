@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback } from "react";
+import { useAboutModal } from "@/contexts/about-modal-context";
 import { LANDING_MAX_W, SECTION_IDS, scrollToSection } from "@/lib/constants";
 
 const FOOTER_COPY = {
@@ -13,6 +14,7 @@ const FOOTER_COPY = {
 };
 
 export default function LandingFooter() {
+  const { openAboutModal } = useAboutModal();
   const onFeatures = useCallback(() => scrollToSection(SECTION_IDS.features), []);
   const onGuide = useCallback(() => scrollToSection(SECTION_IDS.guide), []);
   const onContact = useCallback(() => scrollToSection(SECTION_IDS.contact), []);
@@ -35,7 +37,7 @@ export default function LandingFooter() {
               <li><button type="button" onClick={onFeatures} className="text-zinc-500 text-xl font-normal font-iranyekan leading-6 hover:text-gray-300">قابلیت ها</button></li>
               {/* <li><button type="button" onClick={onGuide} className="text-zinc-500 text-xl font-normal font-iranyekan leading-6 hover:text-gray-300">آموزش‌ها</button></li>
               <li><button type="button" onClick={onContact} className="text-zinc-500 text-xl font-normal font-iranyekan leading-6 hover:text-gray-300">تماس با ما</button></li> */}
-              <li><a href="#" className="text-zinc-500 text-xl font-normal font-iranyekan leading-6 hover:text-gray-300">درباره ما</a></li>
+              <li><button type="button" onClick={openAboutModal} className="text-zinc-500 text-xl font-normal font-iranyekan leading-6 hover:text-gray-300">درباره ما</button></li>
             </ul>
           </div>
           {/* <div className="flex flex-col items-center">
@@ -64,7 +66,7 @@ export default function LandingFooter() {
             <li><button type="button" onClick={onFeatures} className="text-zinc-500 text-lg font-iranyekan">قابلیت ها</button></li>
             {/* <li><button type="button" onClick={onGuide} className="text-zinc-500 text-lg font-iranyekan">آموزش‌ها</button></li>
             <li><button type="button" onClick={onContact} className="text-zinc-500 text-lg font-iranyekan">تماس با ما</button></li> */}
-            <li><a href="#" className="text-zinc-500 text-lg font-iranyekan">درباره ما</a></li>
+            <li><button type="button" onClick={openAboutModal} className="text-zinc-500 text-lg font-iranyekan">درباره ما</button></li>
           </ul>
         </div>
         {/* <div className="flex flex-col">

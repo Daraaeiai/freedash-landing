@@ -9,9 +9,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAboutModal } from "@/contexts/about-modal-context";
 import { LANDING_MAX_W, SECTION_IDS, scrollToSection } from "@/lib/constants";
 
 function LandingHeader() {
+  const { openAboutModal } = useAboutModal();
   const onFeatures = useCallback(() => scrollToSection(SECTION_IDS.features), []);
   const onGuide = useCallback(() => scrollToSection(SECTION_IDS.guide), []);
   const onContact = useCallback(() => scrollToSection(SECTION_IDS.contact), []);
@@ -31,6 +33,7 @@ function LandingHeader() {
               type="button"
               className="w-10 h-10 rounded-2xl border border-gray-200 flex items-center justify-center text-white"
               aria-label="منو"
+              suppressHydrationWarning
             >
               <MoreIcon className="w-6 h-6" />
             </button>
@@ -42,10 +45,8 @@ function LandingHeader() {
             {/* <DropdownMenuItem onClick={onGuide} className="cursor-pointer text-right justify-end text-base font-semibold">
               آموزش‌ها
             </DropdownMenuItem> */}
-            <DropdownMenuItem asChild>
-              <a href="#" className="text-right justify-end text-base font-semibold">
-                درباره ما
-              </a>
+            <DropdownMenuItem onSelect={openAboutModal} className="cursor-pointer text-right justify-end text-base font-semibold">
+              درباره ما
             </DropdownMenuItem>
             {/* <DropdownMenuItem onClick={onContact} className="cursor-pointer text-right justify-end text-base font-semibold">
               تماس با ما
@@ -63,7 +64,7 @@ function LandingHeader() {
       <nav className="hidden lg:flex items-center gap-8">
         <button type="button" onClick={onFeatures} className="text-neutral-400 text-lg font-semibold font-iranyekan hover:text-white transition-colors">قابلیت ها</button>
         {/* <button type="button" onClick={onGuide} className="text-neutral-400 text-lg font-semibold font-iranyekan hover:text-white transition-colors">آموزش‌ها</button> */}
-        <a href="#" className="text-neutral-400 text-lg font-semibold font-iranyekan hover:text-white transition-colors">درباره ما</a>
+        <button type="button" onClick={openAboutModal} className="text-neutral-400 text-lg font-semibold font-iranyekan hover:text-white transition-colors">درباره ما</button>
         {/* <button type="button" onClick={onContact} className="text-neutral-400 text-lg font-semibold font-iranyekan hover:text-white transition-colors">تماس با ما</button> */}
       </nav>
       <div className="hidden lg:flex items-center">
