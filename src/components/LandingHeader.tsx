@@ -39,19 +39,19 @@ function LandingHeader() {
             <DropdownMenuItem onClick={onFeatures} className="cursor-pointer text-right justify-end text-base font-semibold">
               قابلیت ها
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={onGuide} className="cursor-pointer text-right justify-end text-base font-semibold">
+            {/* <DropdownMenuItem onClick={onGuide} className="cursor-pointer text-right justify-end text-base font-semibold">
               آموزش‌ها
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
             <DropdownMenuItem asChild>
               <a href="#" className="text-right justify-end text-base font-semibold">
                 درباره ما
               </a>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={onContact} className="cursor-pointer text-right justify-end text-base font-semibold">
+            {/* <DropdownMenuItem onClick={onContact} className="cursor-pointer text-right justify-end text-base font-semibold">
               تماس با ما
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
             <DropdownMenuItem asChild>
-              <a href="#" className="text-right justify-end text-base font-semibold border-t border-slate-700 mt-2 pt-2">
+              <a href="#" className="text-right justify-end text-base font-semibold border-t border-slate-700 text-gray-200 mt-2 pt-2">
                 شروع رایگان
               </a>
             </DropdownMenuItem>
@@ -62,9 +62,9 @@ function LandingHeader() {
       {/* دسکتاپ: ناو + CTA */}
       <nav className="hidden lg:flex items-center gap-8">
         <button type="button" onClick={onFeatures} className="text-neutral-400 text-lg font-semibold font-iranyekan hover:text-white transition-colors">قابلیت ها</button>
-        <button type="button" onClick={onGuide} className="text-neutral-400 text-lg font-semibold font-iranyekan hover:text-white transition-colors">آموزش‌ها</button>
+        {/* <button type="button" onClick={onGuide} className="text-neutral-400 text-lg font-semibold font-iranyekan hover:text-white transition-colors">آموزش‌ها</button> */}
         <a href="#" className="text-neutral-400 text-lg font-semibold font-iranyekan hover:text-white transition-colors">درباره ما</a>
-        <button type="button" onClick={onContact} className="text-neutral-400 text-lg font-semibold font-iranyekan hover:text-white transition-colors">تماس با ما</button>
+        {/* <button type="button" onClick={onContact} className="text-neutral-400 text-lg font-semibold font-iranyekan hover:text-white transition-colors">تماس با ما</button> */}
       </nav>
       <div className="hidden lg:flex items-center">
         <a href="#" className="px-8 py-2 rounded-3xl outline outline-1 outline-gray-200 flex items-center justify-center gap-2.5 hover:bg-gray-800 transition-colors">

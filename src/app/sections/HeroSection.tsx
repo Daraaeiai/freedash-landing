@@ -49,7 +49,7 @@ export default function HeroSection() {
             </div>
           </h1>
           <p className="w-full max-w-[566px] mx-auto text-center text-neutral-400 text-xl font-medium font-iranyekan leading-9 mb-12">
-            داشبوردی یکپارچه برای تحلیل، توصیه‌های هوشمند، اخبار لحظه‌ای و مشاوره تخصصی — همه در یک جا.
+            خدمتی یکپارچه برای تحلیل، توصیه‌های هوشمند و مشاوره تخصصی، همه در یک جا.
           </p>
           <div className="relative flex flex-col lg:flex-row justify-center items-center gap-12 lg:gap-24 min-h-[500px] mb-20">
             <div className="relative order-1 lg:order-1">
@@ -115,26 +115,24 @@ export default function HeroSection() {
             <div className="absolute right-[20%] top-1/2 -translate-y-1/2 w-[180px] h-[180px] -rotate-[23deg] bg-violet-600/25 rounded-full blur-[80px] pointer-events-none" />
             <div className="absolute right-[5%] top-[20%] w-[160px] h-[160px] -rotate-[23deg] bg-violet-500/20 rounded-full blur-[80px] pointer-events-none" />
             <div className="absolute right-[15%] bottom-[30%] w-[140px] h-[140px] rotate-12 bg-blue-600/20 rounded-full blur-[80px] pointer-events-none" />
-            <h3 className="text-center text-white text-4xl lg:text-5xl font-semibold font-iranyekan mb-6 flex flex-col gap-6 items-center relative z-10">
+            <h3 className="text-center text-white text-4xl lg:text-5xl font-semibold font-iranyekan flex flex-col gap-6 items-center relative z-10">
               <span>پلنی انتخاب کنید که متناسب با</span>
               <span> مسیر رشد شماست</span>
             </h3>
-            <p className="max-w-[980px] mx-auto text-center text-zinc-500 text-xl font-medium font-iranyekan leading-9 mb-16">
-              لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است
-            </p>
-            <div className="flex flex-wrap justify-center gap-8 relative z-10">
+
+            <div className="flex flex-wrap justify-center gap-8 relative z-10 mt-10">
               <div className="w-full max-w-[593px] h-72 bg-[#141A31] rounded-[42px] border-2 border-[#323250] p-8 flex flex-col justify-between items-center">
                 <h4 className="text-white text-4xl font-semibold font-iranyekan leading-tight">پلن ۱ ساله</h4>
                 <p className="text-zinc-500 text-xl font-medium font-iranyekan leading-9">لورم ایپسوم متن ساختگی با تولید</p>
                 <div className="w-80 px-8 py-4 bg-indigo-700 rounded-3xl inline-flex justify-center items-center gap-2.5">
-                  <span className="text-gray-200 text-2xl font-normal font-iranyekan leading-9">60,000,000 تومان</span>
+                  <span className="text-gray-200 text-2xl font-normal font-iranyekan leading-9">70,000,000 تومان</span>
                 </div>
               </div>
               <div className="w-full max-w-[593px] h-72 bg-[#141A31] rounded-[42px] border-2 border-[#323250] p-8 flex flex-col justify-between items-center">
                 <h4 className="text-white text-4xl font-semibold font-iranyekan leading-tight">پلن ۶ ماهه</h4>
                 <p className="text-zinc-500 text-xl font-medium font-iranyekan leading-9">لورم ایپسوم متن ساختگی با تولید</p>
                 <div className="w-80 px-8 py-4 rounded-3xl outline outline-[2px] outline-blue-600 outline-offset-[-3px] inline-flex justify-center items-center gap-2.5">
-                  <span className="text-gray-200 text-2xl font-normal font-iranyekan leading-9">35,000,000 تومان</span>
+                  <span className="text-gray-200 text-2xl font-normal font-iranyekan leading-9">45,000,000 تومان</span>
                 </div>
               </div>
             </div>

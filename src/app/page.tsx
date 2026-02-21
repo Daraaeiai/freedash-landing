@@ -54,12 +54,12 @@ export default function LandingPage() {
         <Suspense fallback={<SectionFallback minHeight="min-h-[320px]" />}>
           <FeaturesSection />
         </Suspense>
-        <Suspense fallback={<SectionFallback minHeight="min-h-[240px]" />}>
+        {/* <Suspense fallback={<SectionFallback minHeight="min-h-[240px]" />}>
           <GuideSection />
         </Suspense>
         <Suspense fallback={<SectionFallback minHeight="min-h-[200px]" />}>
           <ContactSection />
-        </Suspense>
+        </Suspense> */}
         <Suspense fallback={<SectionFallback minHeight="min-h-[180px]" />}>
           <LandingFooter />
         </Suspense>
