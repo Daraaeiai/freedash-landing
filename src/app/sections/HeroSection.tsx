@@ -75,7 +75,7 @@ export default function HeroSection() {
           </p>
           <div className="relative flex flex-col lg:flex-row justify-center items-center gap-12 lg:gap-24 min-h-[500px] mb-20">
             <div className="relative order-1 lg:order-1">
-              <div className="relative z-5 mt-20 w-[300px] md:w-[350px] animate-float">
+              <div className="relative z-5 mt-20 w-[300px] md:w-[450px] animate-float">
 
                 <div className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[90%] h-[50%] bg-blue-600/20 blur-[90px] rounded-full -z-10 pointer-events-none mix-blend-screen" />
 
@@ -89,10 +89,10 @@ export default function HeroSection() {
                   }}
                 >
                   <Image
-                    src="/images/phone-1.svg"
+                    src="/images/phone.svg"
                     alt="App"
-                    width={300}
-                    height={700}
+                    width={500}
+                    height={900}
                     className="object-auto w-full h-auto"
                     priority
                   />
@@ -244,7 +244,7 @@ export default function HeroSection() {
             }}
           >
             <Image
-              src="/images/phone-1.svg"
+              src="/images/phone.svg"
               alt="App"
               width={200}
               height={700}

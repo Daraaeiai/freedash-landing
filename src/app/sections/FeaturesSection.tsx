@@ -77,14 +77,15 @@ export default function FeaturesSection() {
         </h2>
         <div className="relative w-full mx-auto" style={{ maxWidth: "var(--landing-max-width)" }}>
           <div className="absolute top-1/2 w-full flex justify-center items-center min-h-[420px] my-8 pointer-events-none z-10 left-0">
-            <div className="absolute left-1/2 top-1/2 mt-10 -translate-x-[78%] -translate-y-1/2 w-[320px] lg:w-[380px] h-[520px] lg:h-[620px] origin-center -rotate-[54deg] z-0">
-              <div className="relative w-full h-full">
-                <Image src="/images/phone-1.svg" alt="" fill className="object-contain drop-shadow-2xl" />
-              </div>
-            </div>
-            <div className="absolute left-1/2 top-1/2 -translate-x-[32%] -translate-y-1/2 w-[320px] lg:w-[380px] h-[520px] lg:h-[620px] origin-center rotate-[10deg] z-[1]">
-              <div className="relative w-full h-full">
-                <Image src="/images/phone-2.svg" alt="" fill className="object-contain drop-shadow-2xl" />
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] lg:w-[580px] h-[520px] lg:h-[620px] origin-center z-0">
+              <div
+                className="relative w-full h-full"
+                style={{
+                  maskImage: "linear-gradient(to bottom, black 0%, transparent 100%)",
+                  WebkitMaskImage: "linear-gradient(to bottom, black 0%, transparent 100%)"
+                }}
+              >
+                <Image src="/images/phones.svg" alt="" fill className="object-contain drop-shadow-2xl" />
               </div>
             </div>
           </div>
